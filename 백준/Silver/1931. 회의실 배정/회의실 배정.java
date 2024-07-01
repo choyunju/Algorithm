@@ -1,36 +1,47 @@
-//문제35 - 1931
+//no. 1931
 import java.util.*;
 import java.io.*;
 
-public class Main {
+class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(reader.readLine());
-		int count = 0;  //가능한 회의의 개수
-		int[][] A = new int[N][2];
+		PriorityQueue<Presentation> queue = new PriorityQueue<>();
+		
 		for(int i=0; i<N; i++) {
 			StringTokenizer token = new StringTokenizer(reader.readLine());
-			int start = Integer.parseInt(token.nextToken());
-			int end = Integer.parseInt(token.nextToken());
-			A[i][0] = start;
-			A[i][1] = end;
+			int s = Integer.parseInt(token.nextToken());
+			int e = Integer.parseInt(token.nextToken());
+			
+			queue.add(new Presentation(s, e));
 		}
-		Arrays.sort(A, new Comparator<int[]>() {
-			@Override
-			public int compare(int[] s, int[] e) {
-				if(s[1] == e[1]) {  //종료시간이 같으면 시작시간이 빠른 것이 먼저
-					return s[0] - e[0];
-				}
-				return s[1] - e[1];  //종료시간이 빠른 것이 먼저
-			}
-		});
-		int endTime = -1;
-		for(int i=0; i<N; i++) {
-			if(A[i][0] >= endTime) {
-				endTime = A[i][1];
+		int count = 0;
+		int time = 0;
+		while(!queue.isEmpty()) {
+			Presentation t = queue.poll();
+			if(time <= t.startTime) {
 				count++;
+				time = t.endTime;
 			}
 		}
 		System.out.println(count);
+	}
+}
+ 
+class Presentation implements Comparable<Presentation> {
+	int startTime;
+	int endTime;
+	
+	Presentation(int startTime, int endTime) {
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
+	@Override
+	public int compareTo(Presentation p1) {
+		if(this.endTime == p1.endTime) {
+			return this.startTime - p1.startTime;
+		}
+		return this.endTime - p1.endTime;
 	}
 }
