@@ -1,42 +1,47 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-public class Main {
-	public static void main(String[] args) throws IOException{
+class Main {
+	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		
-		int n = Integer.parseInt(reader.readLine());
-		
-		//우선순위 큐는 기본적으로 정수형에 대해 오름차순 정렬
-		PriorityQueue<Integer> queue = new PriorityQueue<>(new Comparator<Integer>() {
-			public int compare(Integer o1, Integer o2) {
-				if(Math.abs(o1) > Math.abs(o2)) {
-					return 1;
-				}
-				else if(Math.abs(o1) == Math.abs(o2)) {
-					return o1 - o2;
-				}
-				else {
-					return -1;
-				}
-			}
-		});
-		
-		for(int i=0; i<n; i++) {
-			int num = Integer.parseInt(reader.readLine());
-			if(num != 0) {
-				queue.add(num);
-			}
-			else {
+		int N = Integer.parseInt(reader.readLine());
+		StringBuilder builder = new StringBuilder();
+		PriorityQueue<Num> queue = new PriorityQueue<>();
+	
+		for(int i=0; i<N; i++) {
+			int x = Integer.parseInt(reader.readLine());
+			int v = x;
+			if(x == 0) {
 				if(queue.isEmpty()) {
-					sb.append("0" + "\n");
+					builder.append("0\n");
+				} else {
+					builder.append(queue.poll().x+"\n");
 				}
-				else {
-					sb.append(queue.poll() + "\n");
+			} else {
+				if(x<0) {
+					v = (-1) * x;
 				}
+				queue.add(new Num(x, v));
 			}
 		}
-		System.out.println(sb);
+		System.out.println(builder);
 	}
+}
+
+class Num implements Comparable<Num> {
+	int x, v;
+	
+	@Override
+	public int compareTo(Num o) {
+		if(this.v == o.v) {
+			return this.x - o.x;
+		}
+		return this.v - o.v;
+	}
+	
+	public Num(int x, int v) {
+		this.x = x;  //원래 숫자
+		this.v = v;  // 절댓값 숫자
+	}
+	
 }
