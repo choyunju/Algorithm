@@ -1,52 +1,98 @@
-//no.70 - 1991
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 class Main {
-	static char[][] tree;
+	static boolean[] visited;
+	static StringBuilder builder;
+	static ArrayList<Node>[] list;
 	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		builder = new StringBuilder();
+		
 		int N = Integer.parseInt(reader.readLine());
-		tree = new char[26][2];
+		visited = new boolean[N];
+		list = new ArrayList[N];
 		for(int i=0; i<N; i++) {
-			String[] temp = reader.readLine().split(" ");
-			int index = temp[0].charAt(0)-'A';
-			char left = temp[1].charAt(0);
-			char right = temp[2].charAt(0);
-			tree[index][0] = left;
-			tree[index][1] = right;
+			list[i] = new ArrayList<>();
 		}
-		preOrder('A');
-		System.out.println();
-		inOrder('A');
-		System.out.println();
-		postOrder('A');
+		
+		for(int i=0; i<N; i++) {
+			StringTokenizer token = new StringTokenizer(reader.readLine());
+			int node = (int)(token.nextToken().charAt(0)) - 65;
+			int left = (int)(token.nextToken().charAt(0)) - 65;
+			int right = (int)(token.nextToken().charAt(0)) - 65;
+			
+			list[node].add(new Node(left, right));
+		}
+		
+		preOrder(0);
+		System.out.println(builder);
+		
+		builder = new StringBuilder();
+		visited = new boolean[N];
+		inOrder(0);
+		System.out.println(builder);
+		
+		builder = new StringBuilder();
+		visited = new boolean[N];
+		postOrder(0);
+		System.out.println(builder);
 	}
 	
-	public static void preOrder(char now) {
-		if(now == '.') {
-			return;
+	static void preOrder(int node) {
+		visited[node] = true;
+		builder.append((char)(node + 65));
+		
+		for(Node next : list[node]) {
+			int left = next.left;
+			int right = next.right;
+			if(left != -19 && !visited[left]) {
+				preOrder(left);
+			}
+			if(right != -19 && !visited[right]) {
+				preOrder(right);
+			}
 		}
-		System.out.print(now);
-		preOrder(tree[now-'A'][0]);
-		preOrder(tree[now-'A'][1]);
 	}
 	
-	public static void inOrder(char now) {
-		if(now == '.') {
-			return;
+	public static void inOrder(int node) {
+		visited[node] = true;
+		for(Node next : list[node]) {
+			int left = next.left;
+			int right = next.right;
+			if(left != -19 && !visited[left]) {
+				inOrder(left);
+			}
+			builder.append((char)(node+65));
+			if(right != -19 && !visited[right]) {
+				inOrder(right);
+			}
 		}
-		inOrder(tree[now-'A'][0]);			
-		System.out.print(now);
-		inOrder(tree[now-'A'][1]);
 	}
 	
-	public static void postOrder(char now) {
-		if(now == '.') {
-			return;
+	public static void postOrder(int node) {
+		visited[node] = true;
+		for(Node next : list[node]) {
+			int left = next.left;
+			int right = next.right;
+			if(left != -19 && !visited[left]) {
+				postOrder(left);
+			}
+			if(right != -19 && !visited[right]) {
+				postOrder(right);
+			}
+			builder.append((char)(node+65));
 		}
-		postOrder(tree[now-'A'][0]);
-		postOrder(tree[now-'A'][1]);
-		System.out.print(now);
+		
+	}
+}
+
+class Node {
+	int left;
+	int right;
+	
+	public Node(int left, int right) {
+		this.left = left;
+		this.right = right;
 	}
 }
