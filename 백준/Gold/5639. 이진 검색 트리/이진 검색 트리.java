@@ -1,69 +1,60 @@
 import java.io.*;
 import java.util.*;
 
-
 class Node {
-	int node;
+	int num;
 	Node left;
 	Node right;
 	
-	public Node(int node) {
-		this.node = node;
+	public Node(int num) {
+		this.num = num;
 		this.left = null;
 		this.right = null;
 	}
 	
-	public void insert(int n) {
-		if(n < this.node) {
+	public void insert(int num) {
+		// 왼쪽으로 삽입
+		if(num < this.num) {
 			if(this.left == null) {
-				this.left = new Node(n);
+				this.left = new Node(num);
 			} else {
-				this.left.insert(n);
+				this.left.insert(num);
 			}
-		} else {
-			if(n>this.node) {
-				if(this.right == null) {
-					this.right = new Node(n);
-				} else {
-					this.right.insert(n);
-				}
+		} 
+		// 오른쪽으로 삽입
+		else {
+			if(this.right == null) {
+				this.right = new Node(num);
+			} else {
+				this.right.insert(num);
 			}
 		}
 	}
+	
 }
 
-public class Main {
-	
+class Main {
+	static Node tree;
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		int root = Integer.parseInt(reader.readLine());
-		Node rootNode = new Node(root);
+		int rootNum = Integer.parseInt(reader.readLine());
+		tree = new Node(rootNum);
 		String s;
-		
 		while((s=reader.readLine()) != null) {
-			int n = Integer.parseInt(s);
-			
-			rootNode.insert(n);
+			int num = Integer.parseInt(s);
+			tree.insert(num);
 		}
 		
-		postOrder(rootNode);
+		postOrder(tree);
 	}
 	
 	public static void postOrder(Node node) {
 		if(node == null) {
 			return;
 		}
-		
 		postOrder(node.left);
 		postOrder(node.right);
-		System.out.println(node.node);
-		
+		System.out.println(node.num);
 	}
-	
-	public static void findRoot(ArrayList<Integer> tree) {
-		int size = tree.size();
-		int mid = size / 2;
-		
-	}
-	
 }
