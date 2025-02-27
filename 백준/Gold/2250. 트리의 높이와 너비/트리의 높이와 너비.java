@@ -1,110 +1,110 @@
 import java.io.*;
 import java.util.*;
 
-
 class Node {
 	int num;
 	int left;
 	int right;
-	int row;
 	int column;
-	
 	
 	public Node(int num, int left, int right) {
 		this.num = num;
 		this.left = left;
 		this.right = right;
 	}
-	
 }
 
 class Main {
-	static int row = 1;
-	static int totalRow;
 	static Node[] tree;
+	static boolean[] visited;
 	static int column = 1;
-	static ArrayList<Node>[] rowList;
-	// 루트를 찾기 위해 부모 노드를 저장
-	// 만약 저장된 값이 없으면 해당 인덱스가 루트
-	static int[] parent;  
+	static ArrayList<Node>[] level;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(reader.readLine());
 		tree = new Node[N+1];
-		rowList = new ArrayList[N+1];
-		parent = new int[N+1];
-		
-		for(int i=1; i<=N; i++) {
-			rowList[i] = new ArrayList<>();
-		}
-		
+		visited = new boolean[N+1];
+		int[] parents = new int[N+1];
 		for(int i=0; i<N; i++) {
 			StringTokenizer token = new StringTokenizer(reader.readLine());
 			int num = Integer.parseInt(token.nextToken());
 			int left = Integer.parseInt(token.nextToken());
 			int right = Integer.parseInt(token.nextToken());
-			if(left == -1) {
+			if(left != -1) {
+				parents[left] = num;
+			} else {
 				left = 0;
-			} else {
-				parent[left] = num;  // 자식 인덱스에 부모를 저장
 			}
-			
-			if(right == -1) {
+			if(right != -1) {
+				parents[right] = num;
+			} else {
 				right = 0;
-			} else {
-				parent[right] = num;  // 자식 인덱스에 부모를 저장
 			}
-			
-			Node n = new Node(num, left, right);
-			tree[num] = n;
+			tree[num] = new Node(num, left, right);
 		}
-		int rootIndex = 0;
+		
+		//루트노드 구하기
+		int root = 0;
 		for(int i=1; i<=N; i++) {
-			if(parent[i] == 0) {
-				rootIndex = i;
+			if(parents[i] == 0) {
+				root = i;
 			}
 		}
 		
-//		tree[1].row = row;
-		row = 1;
+		//중위순회를 통한 Column 구하기
+		inOrder(tree[root]);
 		
-		setRow(tree[rootIndex], row);
-		setColumn(tree[rootIndex]);
+		//row 구하기
+		int depth = 1;
+		level = new ArrayList[N+1];
+		for(int i=1; i<=N; i++) {
+			level[i] = new ArrayList<>();
+		}
+		DFS(tree[root], depth);
+		
 		int max = 0;
 		StringBuilder builder = new StringBuilder();
 		for(int i=1; i<=N; i++) {
-			if(rowList[i].size() >= 1) {
-				Node start = rowList[i].get(0);
-				Node end = rowList[i].get(rowList[i].size()-1);
-				int diff = end.column - start.column + 1;
+			if(level[i].size() >= 1) {
+				int a = level[i].get(0).column;
+				int b = level[i].get(level[i].size()-1).column;
+				int diff = b - a + 1;
 				if(max < diff) {
-					max = diff;
 					builder = new StringBuilder();
-					builder.append(i + " " + diff);
+					max = diff;
+					builder.append(i + " ");
+					builder.append(max);
 				}
 			}
-		}	
+		}
 		System.out.println(builder);
 	}
 	
-	public static void setRow(Node node, int row) {
+	public static void DFS(Node node, int depth) {
 		if(node == null) {
 			return;
 		}
-		node.row = row;
-		rowList[row].add(node);
-		row++;
-		setRow(tree[node.left], row);
-		setRow(tree[node.right], row);
+		visited[node.num] = true;
+		level[depth].add(node);
+		depth++;
+		
+		if(!visited[node.left]) {
+			DFS(tree[node.left], depth);
+		}
+		if(!visited[node.right]) {
+			DFS(tree[node.right], depth);
+		}
+		
 	}
 	
-	public static void setColumn(Node node) {
+	public static void inOrder(Node node) {
 		if(node == null) {
 			return;
 		}
-		setColumn(tree[node.left]);
-		node.column = column++;
-		setColumn(tree[node.right]);
+		inOrder(tree[node.left]);
+		node.column = column;
+		column++;
+		inOrder(tree[node.right]);
 	}
 }
