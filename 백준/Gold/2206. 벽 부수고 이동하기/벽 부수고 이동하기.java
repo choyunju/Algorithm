@@ -65,8 +65,8 @@ public class Main {
 					// 다음 칸에 벽이 있는 경우
 					if(arr[x][y] == 1) {
 						// 현재까지 벽을 부수지 않았다면
-						if(now.crash==0 && !visited[x][y][1]) {
-							visited[x][y][now.crash] = true;
+						if(now.crash==0) {
+//							visited[x][y][now.crash] = true;
 							distance[x][y] = distance[now.x][now.y] + 1;
 							// crash를 1로 변경 => 벽을 부순 상태로 큐 삽입
 							queue.add(new Node(x, y, 1));
