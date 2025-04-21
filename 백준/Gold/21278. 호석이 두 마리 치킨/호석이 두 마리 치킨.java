@@ -52,7 +52,7 @@ class Main {
 						minList[0] = i;
 						minList[1] = j;
 					} else if(minList[0] == i) {
-						minList[1] = Math.max(minList[1], j);
+						minList[1] = Math.min(minList[1], j);
 					}
 				} else if(minList[2] > min) {
 					minList[0] = i;
