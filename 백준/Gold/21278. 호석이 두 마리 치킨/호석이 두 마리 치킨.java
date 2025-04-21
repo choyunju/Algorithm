@@ -7,7 +7,7 @@ class Main {
 	static boolean[] visited;
 	static int[] distance;
 	static int[] minList;
-	static int min;
+
 	static int first, second;
 	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -20,7 +20,6 @@ class Main {
 		// 0=첫번째 지점 / 1=두번째 지점 / 2=최단 왕복 시간의 합
 		minList = new int[3];
 		distance = new int[N+1];
-		Arrays.fill(distance, Integer.MAX_VALUE);
 		
 		for(int i=1; i<=N; i++) {
 			list[i] = new ArrayList<>();
@@ -32,17 +31,20 @@ class Main {
 			list[a].add(b);
 			list[b].add(a);
 		}
-		
+
 		minList[2] = Integer.MAX_VALUE;
 		for(int i=1; i<=N-1; i++) {
 			for(int j=i+1; j<=N; j++) {
+				int min=0;
+				Arrays.fill(distance, Integer.MAX_VALUE);
+				visited = new boolean[N+1];
 				DFS(i, 0);
 				visited = new boolean[N+1];
 				DFS(j, 0);
-				
 				for(int d=1; d<=N; d++) {
 					min += distance[d];
 				}
+							
 				if(minList[2] == min) {
 					if(minList[0] > i) {
 						minList[0] = i;
@@ -57,6 +59,14 @@ class Main {
 				}
 			}
 		}
+//		Arrays.fill(distance, Integer.MAX_VALUE);
+//		DFS(1, 0);
+//		visited = new boolean[N+1];
+//		DFS(4, 0);
+//		for(int i=1; i<=N; i++) {
+//			min += distance[i];
+//		}
+//		System.out.println(min);
 		for(int i=0; i<3; i++) {
 			System.out.print(minList[i] + " ");
 		}
