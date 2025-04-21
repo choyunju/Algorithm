@@ -31,18 +31,20 @@ class Main {
 			list[a].add(b);
 			list[b].add(a);
 		}
-
+		
+		minList[0] = 1;
+		minList[1] = 2;
 		minList[2] = Integer.MAX_VALUE;
 		for(int i=1; i<=N-1; i++) {
 			for(int j=i+1; j<=N; j++) {
 				int min=0;
 				Arrays.fill(distance, Integer.MAX_VALUE);
 				visited = new boolean[N+1];
-				DFS(i, 0);
+				BFS(i, 0);
 				visited = new boolean[N+1];
-				DFS(j, 0);
+				BFS(j, 0);
 				for(int d=1; d<=N; d++) {
-					min += distance[d];
+					min += 2 * distance[d];
 				}
 							
 				if(minList[2] == min) {
@@ -59,27 +61,33 @@ class Main {
 				}
 			}
 		}
-//		Arrays.fill(distance, Integer.MAX_VALUE);
-//		DFS(1, 0);
-//		visited = new boolean[N+1];
-//		DFS(4, 0);
-//		for(int i=1; i<=N; i++) {
-//			min += distance[i];
-//		}
-//		System.out.println(min);
 		for(int i=0; i<3; i++) {
 			System.out.print(minList[i] + " ");
 		}
-		
+//		Arrays.fill(distance, Integer.MAX_VALUE);
+//		visited = new boolean[N+1];
+//		BFS(1, 0);
+//		visited = new boolean[N+1];
+//		BFS(3, 0);
+//		for(int i=1; i<=N; i++) {
+//			System.out.println(distance[i]);
+//		}
 	}
 	
-	static void DFS(int n, int depth) {
+	static void BFS(int n, int d) {	
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(n);
 		visited[n] = true;
-		
-		distance[n] = Math.min(distance[n], 2*depth);
-		for(int next : list[n]) {
-			if(!visited[next]) {
-				DFS(next, depth+1);
+		int depth = 0;
+		distance[n] = depth;
+		while(!queue.isEmpty()) {
+			int now = queue.poll();
+			for(int next : list[now]) {
+				if(!visited[next]) {
+					visited[next] = true;
+					distance[next] = Math.min(distance[next], distance[now]+1);
+					queue.add(next);
+				}
 			}
 		}
 	}
