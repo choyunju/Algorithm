@@ -37,20 +37,14 @@ class Main {
 			right(x, y);
 			down(x, y);
 		}
-//		top(x, y);
-//		left(x, y);
-//		right(x, y);
-//		down(x, y);
-		
+	
 		int result = 0;
 		for(int i=0; i<N; i++) {
 			for(int j=0; j<M; j++) {
 				if(visited[i][j]) {
 					result++;
 				}
-//				System.out.print(visited[i][j] + " ");
 			}
-//			System.out.println();
 		}
 		System.out.println(result);
 	}
@@ -69,6 +63,7 @@ class Main {
 			if(x<0 || x>=N || y<0 || y>=M) {
 				continue;
 			}
+			
 			// 물건이 없는 경우
 			if(map[x][y] == 0) {
 				if(!visited[x][y]) {
@@ -96,8 +91,7 @@ class Main {
 			else if(map[x][y] == 3) {
 				if(!visited[x][y]) {
 					count++;
-					visited[x][y] = true;
-					
+					visited[x][y] = true;		
 				}
 				right(x, y);
 			}
@@ -106,11 +100,9 @@ class Main {
 				if(!visited[x][y]) {
 					visited[x][y] = true;
 					count++;
-					
 				}	
 				left(x, y);
-			}
-			
+			}	
 		}
 	}
 	
@@ -154,8 +146,7 @@ class Main {
 			else if(map[x][y] == 3) {
 				if(!visited[x][y]) {
 					count++;
-					visited[x][y] = true;
-					
+					visited[x][y] = true;	
 				}
 				top(x, y);
 			}
@@ -164,11 +155,9 @@ class Main {
 				if(!visited[x][y]) {
 					count++;
 					visited[x][y] = true;
-					
 				}
 				down(x, y);
 			}
-			
 		}
 	}
 	
@@ -190,7 +179,6 @@ class Main {
 				if(!visited[x][y]) {
 					visited[x][y] = true;
 					count++;
-
 				}
 				queue.add(new int[] {x, y});
 			}
@@ -199,7 +187,6 @@ class Main {
 				if(!visited[x][y]) {
 					visited[x][y] = true;
 					count++;
-					
 				}
 				queue.add(new int[] {x, y});
 			} 
@@ -214,8 +201,7 @@ class Main {
 			else if(map[x][y] == 3) {
 				if(!visited[x][y]) {
 					count++;
-					visited[x][y] = true;
-					
+					visited[x][y] = true;	
 				}
 				left(x, y);
 			}
@@ -223,12 +209,10 @@ class Main {
 			else if(map[x][y] == 4) {
 				if(!visited[x][y]) {
 					count++;
-					visited[x][y] = true;
-					
+					visited[x][y] = true;	
 				}
 				right(x, y);
-			}
-			
+			}	
 		}
 	}
 	
@@ -250,7 +234,6 @@ class Main {
 				if(!visited[x][y]) {
 					visited[x][y] = true;
 					count++;
-					
 				}
 				queue.add(new int[] {x, y});
 			}
@@ -266,7 +249,6 @@ class Main {
 				if(!visited[x][y]) {
 					visited[x][y] = true;
 					count++;
-					
 				}
 				queue.add(new int[] {x, y});
 			}
@@ -275,7 +257,6 @@ class Main {
 				if(!visited[x][y]) {
 					count++;
 					visited[x][y] = true;
-					
 				}
 				down(x, y);
 			}
@@ -284,58 +265,9 @@ class Main {
 				if(!visited[x][y]) {
 					count++;
 					visited[x][y] = true;
-					
 				}
 				top(x, y);
 			}
-			
 		}
-	}
-	
-	public static void BFS(int i, int j) {
-		visited[i][j] = true;
-		Queue<int[]> queue = new LinkedList<>();
-		queue.add(new int[] {i, j});
-		// 에이컨 위쪽 방향
-		while(!queue.isEmpty()) {
-			int[] now = queue.poll();
-			
-			
-			
-			int x = now[0]-1;  //x좌표만 위로 이동
-			int y = now[1];
-			
-			
-			
-			// 범위를 벗어나는 경우
-			if(x<0 || x>=N || y<0 || y>=M) {
-				continue;
-			}
-			// 물건 1인 경우 바람은 그대로 위쪽 방향 유지
-			if(map[x][y] == 1) {
-				queue.add(new int[] {x, y});
-			} 
-			// 물건 2인 경우
-			else if(map[x][y] == 2) {
-				
-			}
-			// 물건 3인 경우 바람이 오른쪽으로 이동
-			else if(map[x][y] == 3) {
-				count++;
-				visited[x][y] = true;
-				
-			}
-			// 물건 4인 경우
-			else if(map[x][y] == 4) {
-				
-			}
-			else if(map[x][y] == 0) {
-				count++;
-				visited[x][y] = true;
-				queue.add(new int[] {x, y});
-			}
-		}
-		
-		
 	}
 }
